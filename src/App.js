@@ -18,17 +18,17 @@ const faqs = [
 function App() {
   return (
     <div className="App">
-      <Accordion />
+      <Accordion data={faqs} />
     </div>
   );
 }
 
 export default App;
 
-function Accordion() {
+function Accordion({ data }) {
   return (
     <div className="accordion">
-      {faqs.map((faq, index) => {
+      {data.map((faq, index) => {
         return (
           <AccordionItem number={index} title={faq.title} text={faq.text} />
         );
@@ -39,14 +39,15 @@ function Accordion() {
 
 function AccordionItem({ number, title, text }) {
   const [open, setOpen] = useState(false);
+
   function handleClick() {
-    setOpen((op) => !op);
+    setOpen((curr) => !curr);
   }
 
   return (
     <div className={`item ${open ? "open" : ""}`} onClick={() => handleClick()}>
-      <p className="number">{number}</p>
-      <p className={`title ${open ? "text" : ""}`}>{title}</p>
+      <p className="number">{number < 9 ? `0${number + 1}` : number}</p>
+      <p className={`title`}>{title}</p>
       <p className="icon">{open ? "-" : "+"}</p>
       {open && <div className="content-box">{text}</div>}
     </div>

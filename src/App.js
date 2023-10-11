@@ -26,30 +26,55 @@ function App() {
 export default App;
 
 function Accordion({ data }) {
+  const [curOpen, setCurOpen] = useState(null);
+
   return (
     <div className="accordion">
       {data.map((faq, index) => {
         return (
-          <AccordionItem number={index} title={faq.title} text={faq.text} />
+          <AccordionItem
+            curOpen={curOpen}
+            onOpen={setCurOpen}
+            number={index}
+            title={faq.title}
+          >
+            {faq.text}
+          </AccordionItem>
         );
       })}
+      <AccordionItem
+        curOpen={curOpen}
+        onOpen={setCurOpen}
+        number={7}
+        title="Reusability is the Key"
+      >
+        <p>It allows react to make wonders</p>
+        <ul>
+          <li>Make it</li>
+          <li>Reusable</li>
+          <li>Once for all</li>
+        </ul>
+      </AccordionItem>
     </div>
   );
 }
 
-function AccordionItem({ number, title, text }) {
-  const [open, setOpen] = useState(false);
+function AccordionItem({ number, title, text, curOpen, onOpen, children }) {
+  const isOpen = curOpen === number;
 
   function handleClick() {
-    setOpen((curr) => !curr);
+    onOpen(isOpen ? null : number);
   }
 
   return (
-    <div className={`item ${open ? "open" : ""}`} onClick={() => handleClick()}>
+    <div
+      className={`item ${isOpen ? "open" : ""}`}
+      onClick={() => handleClick()}
+    >
       <p className="number">{number < 9 ? `0${number + 1}` : number}</p>
       <p className={`title`}>{title}</p>
-      <p className="icon">{open ? "-" : "+"}</p>
-      {open && <div className="content-box">{text}</div>}
+      <p className="icon">{isOpen ? "-" : "+"}</p>
+      {isOpen && <div className="content-box">{children}</div>}
     </div>
   );
 }
